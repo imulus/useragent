@@ -16,7 +16,7 @@ class UserAgent
     }.freeze
 
     def self.normalize_os(os)
-      Windows[os] || normalize_mac_os_x(os) || os
+      Windows[os] || normalize_ios(os) || normalize_mac_os_x(os) || os
     end
 
     private
@@ -28,6 +28,12 @@ class UserAgent
             version = $1.gsub('_', '.')
             "OS X #{version}"
           end
+        end
+      end
+
+      def self.normalize_ios(os)
+        if os =~ /CPU.*?OS (\d+[._]\d+([._]\d+)*) like Mac OS X/i
+          "iOS #{$1.gsub('_','.')}"
         end
       end
   end
